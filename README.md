@@ -63,7 +63,8 @@ Key plots from EDA and modeling are saved in the `assets/` directory for quick i
 These visuals complement the notebooks and highlight the main modeling insights.
 
 **Baseline forecast vs. actuals on validation data**, illustrating how lagged sales and calendar effects capture overall demand patterns.
-<img width="990" height="749" alt="forecast_comparison" src="https://github.com/user-attachments/assets/694925e4-30bb-4652-9cc8-5e2997343188" />
+<img width="1479" height="593" alt="forecast_comparison" src="https://github.com/user-attachments/assets/d6ee1102-c5e2-4d51-9cec-15d1c5c71954" />
+
 
 **Feature importance from the baseline model**, highlighting the dominance of lagged sales and calendar features.
 <img width="1332" height="884" alt="feature_importance" src="https://github.com/user-attachments/assets/63cbb32e-a049-4a91-b644-34e6d96f8096" />
