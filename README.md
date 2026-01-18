@@ -1,64 +1,67 @@
 # Walmart Weekly Sales Forecasting
 
 This project focuses on **realistic weekly retail demand forecasting** using the Walmart Store Sales dataset.  
-The objective is to predict future `Weekly_Sales` while respecting **real-world forecasting constraints**, where future promotions and macroeconomic conditions are not known at the time predictions are made.
+My objective was to learn more about time series forecasting from a business perspective. Additionally, I wanted to get a good understanding of my data through EDA. This helped with the iterrative process of improving my model based on EDA findings rather than just fitting and predicting blindly. 
 
-Rather than optimizing for model complexity, this project emphasizes:
+Instead of optimizing for model complexity, this project focused more on:
 - careful exploratory data analysis (EDA)
 - leakage-aware feature engineering
-- time-based validation
-- a clean, reproducible baseline forecasting pipeline
+- time-aware validation
+- a clean and reproducible baseline forecasting pipeline
+- learning past sales movement rather than simple time index
 
----
 
-## Problem Context
+## Overall Problem
 
 In practical retail forecasting settings, models must generate predictions using only information available up to the forecast date.  
-The provided test set includes only `Store`, `Dept`, `Date`, and `IsHoliday`, which motivates a modeling approach that:
+The provided test set includes only `Store`, `Dept`, `Date`, and `IsHoliday`, which guided my approach to modeling:
 
-- avoids forward-looking features
-- uses lagged sales history as the primary signal
-- incorporates promotions and macro variables only through historical summaries
+In real world sales forecasting models can only use data up to the given forecast date. This was a challenge as I had to avoid leaking any information that the model could "peak into the future" with.
+- avoids using forward-looking features
+- uses lagged sales history as the primary signal to capture seasonality and lag dependence
+- incorporates promotions and macro variable signals only through historical summaries when predicting
 
-This project is designed to mirror those constraints as closely as possible.
 
----
 
-## Modeling Approach (Baseline)
+## Modeling Approach (Beating the baseline)
 
-Key modeling decisions are informed directly by EDA findings.
+My modeling assumptions were built upon EDA findings
 
 - **Sales structure**
-  - Weekly sales exhibit a smooth long-term trend with sharp, event-driven deviations
-  - Holiday effects explain a large portion of predictable variation
+  - Weekly sales were strong, non-stationary, and had sharo event driven deviations
+  - Seasonal and holiday effects accounted for a large proportion of variance from the general sales trend over time
 
 - **Lag features**
-  - Short lags (1–2 weeks, optionally 4)
-  - Small rolling windows (4–8 weeks)
-  - Long autoregressive histories are avoided due to weak residual autocorrelation
+  - Short lags (1–2 weeks) were optimal due to weak residual autocorrelation found in EDA process
+  - Small rolling intervals (4–8 weeks) 
+  - Long autoregressive histories were avoided again due to weak residual autocorrelation
 
 - **Promotions**
-  - MarkDown variables contain substantial, non-random missingness
-  - Each MarkDown feature is represented using:
-    - a promotion-present indicator
-    - an imputed numeric value (e.g., 0 when missing)
+  - EDA found meaningful signal in Markdown missingness.
+  - This prompted me to use missigness flagging and strategic imputation in the data pipeline. 
+  - More specifically I used:
+    - a promotion-present indicator to account for store/department cominations that varied in markdown frequenices.
+    - imputation of numeric values (e.g., 0 when missing)
 
 - **Store heterogeneity**
-  - Store, Type, and Size are included to capture scale and behavioral differences across stores
+  - Store, Type, and Size were included to capture scale and behavioral difference signal
 
 - **Validation**
   - Forward-chaining, time-based validation is used to reflect real forecasting conditions and prevent leakage
 
----
+- **Random Search**
+   - Used a custom random search algorithm to tune gradient boost hyperparameters in a time efficient manner
+
+
 
 ## Visualizations
 
-Key plots from EDA and modeling are saved in the `assets/` directory for quick inspection, including:
+Key plots from EDA and modeling are saved in the `assets/` directory:
 
 - Sales trend and seasonality
-- Autocorrelation behavior of detrended series
+- Autocorrelation behavior
 - Promotion missingness patterns
-- Validation predictions vs. actuals
+- Validation predictions vs. actual values
 
 These visuals complement the notebooks and highlight the main modeling insights.
 
@@ -69,34 +72,6 @@ These visuals complement the notebooks and highlight the main modeling insights.
 **Feature importance from the baseline model**, highlighting the dominance of lagged sales and calendar features.
 <img width="1332" height="884" alt="feature_importance" src="https://github.com/user-attachments/assets/63cbb32e-a049-4a91-b644-34e6d96f8096" />
 
-
-
----
-
-## Repo Structure:
-walmart-sales-forecast-ML/
-│
-├── notebooks/
-│ ├── 01_eda.ipynb
-│ │ - Exploratory analysis
-│ │ - Trend and seasonality inspection
-│ │ - Feature availability and modeling assumptions
-│ │
-│ ├── 02_baseline_model.ipynb
-│ │ - Feature engineering
-│ │ - Lagged sales baselines
-│ │ - Time-based validation
-│
-├── src/
-│ ├── features.py # Lag and rolling feature construction
-│ ├── train.py # Model training utilities
-│ ├── evaluate.py # Evaluation helpers
-│
-├── assets/
-│ ├── example_plots.png # Selected visualizations for quick review
-│
-├── README.md
-├── requirements.txt
 
 
 > Raw data files are intentionally **not included
