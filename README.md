@@ -11,7 +11,7 @@ Instead of optimizing for model complexity, this project focused more on:
 - learning past sales movement rather than simple time index
 
 
-## Overall Problem
+## Problem Statement
 
 In practical retail forecasting settings, models must generate predictions using only information available up to the forecast date.  
 The provided test set includes only `Store`, `Dept`, `Date`, and `IsHoliday`, which guided my approach to modeling:
