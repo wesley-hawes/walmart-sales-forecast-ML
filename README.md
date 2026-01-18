@@ -14,7 +14,7 @@ Instead of optimizing for model complexity, this project focused more on:
 ## Problem Statement
 
 In practical retail forecasting settings, models must generate predictions using only information available up to the forecast date.  
-The provided test set includes only `Store`, `Dept`, `Date`, and `IsHoliday`, which guided my approach to modeling:
+The provided test set includes only Store, Dept, Date, and IsHoliday, which guided my approach to modeling:
 
 In real world sales forecasting models can only use data up to the given forecast date. This was a challenge as I had to avoid leaking any information that the model could "peak into the future" with.
 - avoids using forward-looking features
